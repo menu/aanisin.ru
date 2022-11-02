@@ -1,5 +1,5 @@
 :root {
-    --bgcolor: #eae6ee;
+    --bgcolor: #ffffff;
     --footerColor: grey;
     --textColor: black;
     --unactiveTextColor: grey;
@@ -13,7 +13,7 @@
     font-style: normal;
 }
 
-h1{
+h1 {
     font-size: 22px;
 }
 
