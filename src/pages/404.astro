@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Страница не найдена — Анисин Алексей" description="Такой страницы нет.">
+  <section class="container wrap">
+    <div class="box">
+      <div class="code">404</div>
+      <p class="text serif">Такой страницы нет. Возможно, адрес поменялся — что иронично для сайта SEO-специалиста.</p>
+      <a href="/" class="home">На главную&#8202;❱</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wrap { padding-top: 80px; padding-bottom: 120px; }
+  .box { border: 1px solid var(--line); padding: 24px 22px; max-width: 460px; }
+  .code { font-size: 44px; font-weight: 700; letter-spacing: -.035em; line-height: 1; }
+  .text { margin-top: 8px; font-size: 16px; line-height: 1.55; color: var(--text); max-width: 32ch; }
+  .home { display: inline-block; margin-top: 10px; font-size: 15px; font-weight: 500; color: var(--accent); }
+  .home:hover { color: var(--accent-hover); }
+</style>

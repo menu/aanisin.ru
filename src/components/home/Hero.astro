@@ -1,0 +1,36 @@
+---
+import MailBlock from '../MailBlock.astro';
+---
+<section class="container hero">
+  <h1 class="title">Делаю так, чтобы сайт находили</h1>
+  <div class="row">
+    <div class="intro">
+      <img class="photo" src="/photo.jpg" width="92" height="92" alt="Алексей Анисин">
+      <div class="text">
+        <p class="lead serif">SEO‑специалист с 2017&nbsp;года. Крупные каталоги и сайты услуг: технический аудит, семантика, структура и рост поискового трафика.</p>
+        <div class="place">Москва, работаю удалённо</div>
+      </div>
+    </div>
+    <MailBlock label="Написать на почту" />
+  </div>
+</section>
+
+<style>
+  .hero { padding-top: 68px; padding-bottom: 80px; }
+  .title { font-size: clamp(44px, 8.2vw, 98px); line-height: .96; font-weight: 700; letter-spacing: -.045em; }
+  .row {
+    margin-top: 38px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px 56px;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .intro { flex: 1 1 500px; min-width: 0; display: flex; flex-wrap: wrap; gap: 22px; align-items: flex-start; }
+  .photo { width: 92px; height: 92px; flex: none; border-radius: 50%; object-fit: cover; display: block; }
+  .text { flex: 1 1 320px; min-width: 0; }
+  .lead { font-size: 20px; line-height: 1.5; color: var(--text); max-width: 44ch; }
+  .place { margin-top: 12px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
+</style>

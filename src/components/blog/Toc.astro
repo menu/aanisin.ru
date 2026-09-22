@@ -1,0 +1,81 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  tags: string[];
+}
+
+const { headings, tags } = Astro.props;
+// footnote-label — служебный заголовок блока сносок
+const items = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
+---
+<aside class="aside">
+  {items.length > 0 && (
+    <details class="toc" open data-toc>
+      <summary class="eyebrow">В этой заметке<span class="caret" aria-hidden="true"></span></summary>
+      <ul class="list">
+        {items.map((h) => <li><a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a></li>)}
+      </ul>
+    </details>
+  )}
+  {tags.length > 0 && (
+    <div class="tags">
+      <span class="eyebrow">Теги</span>
+      <ul class="tag-list">
+        {tags.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  )}
+</aside>
+
+<script>
+  const toc = document.querySelector<HTMLDetailsElement>('[data-toc]');
+  if (toc) {
+    const narrow = window.matchMedia('(max-width: 879px)');
+    // На широком экране оглавление всегда раскрыто, на узком — свёрнуто по умолчанию
+    const syncOpen = () => { toc.open = !narrow.matches; };
+    narrow.addEventListener('change', syncOpen);
+    syncOpen();
+    toc.querySelector('summary')?.addEventListener('click', (e) => {
+      if (!narrow.matches) e.preventDefault();
+    });
+
+    const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    const targets = links
+      .map((l) => document.getElementById(l.dataset.tocLink!))
+      .filter((el): el is HTMLElement => el !== null);
+    const spy = () => {
+      let active: string | undefined;
+      for (const el of targets) {
+        if (el.getBoundingClientRect().top <= 150) active = el.id;
+      }
+      links.forEach((l) => l.classList.toggle('active', l.dataset.tocLink === active));
+    };
+    window.addEventListener('scroll', spy, { passive: true });
+    spy();
+  }
+</script>
+
+<style>
+  .aside { flex: 1 1 230px; min-width: 0; max-width: 300px; position: sticky; top: 96px; }
+  .toc { background: var(--sand); padding: 18px 20px; }
+  summary { display: flex; gap: 12px; justify-content: space-between; align-items: center; list-style: none; cursor: default; }
+  summary::-webkit-details-marker { display: none; }
+  .caret { display: none; font-size: 16px; line-height: 1; color: var(--accent); letter-spacing: 0; }
+  .caret::before { content: '+'; }
+  .toc[open] .caret::before { content: '−'; }
+  .list { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.35; }
+  .list a { color: #0A62B0; }
+  .list a:hover { color: #084E8C; }
+  .list a.active { color: var(--ink); font-weight: 600; }
+  .tags { margin-top: 20px; display: flex; flex-direction: column; gap: 9px; }
+  .tag-list { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+  .tag-list li { background: var(--sand); padding: 6px 12px; color: var(--ink); }
+
+  @media (max-width: 879px) {
+    .aside { position: static; flex-basis: 100%; max-width: none; width: 100%; }
+    summary { cursor: pointer; }
+    .caret { display: block; }
+  }
+</style>

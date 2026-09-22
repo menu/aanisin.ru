@@ -1,0 +1,26 @@
+---
+import SectionHead from '../SectionHead.astro';
+import ServiceRow from '../ServiceRow.astro';
+import { services } from '../../data/home';
+---
+<section id="uslugi" class="band services">
+  <div class="container">
+    <SectionHead title="Чем могу помочь" />
+    <p class="note">Сейчас из нового беру только консультации.<br>Остальное — когда освободится место в графике.</p>
+    <ul class="list">
+      {services.map((s, i) => <ServiceRow num={i + 1} {...s} />)}
+      <ServiceRow
+        num={services.length + 1}
+        title="Консультация"
+        desc="Полтора часа разбора: что у вас происходит с поиском и что делать в первую очередь."
+        featured
+      />
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services { padding: 80px 0; }
+  .note { margin-top: 16px; font-size: 16px; line-height: 1.5; color: var(--text-2); max-width: 60ch; text-wrap: pretty; }
+  .list { margin: 8px 0 0; padding: 0; list-style: none; }
+</style>

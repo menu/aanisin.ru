@@ -1,0 +1,25 @@
+---
+import Placeholder from '../Placeholder.astro';
+
+interface Props {
+  caption?: string;
+  // Волосяная рамка для скриншотов: их собственный фон совпадает с --paper,
+  // поэтому без нее у картинки нет края и она растворяется в странице
+  framed?: boolean;
+}
+
+const { caption, framed = false } = Astro.props;
+---
+<figure class="figure">
+  <div class:list={['media', { framed }]}>
+    {Astro.slots.has('default') ? <slot /> : <Placeholder />}
+  </div>
+  {caption && <figcaption class="eyebrow caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .figure { margin: 30px 0 0; }
+  .figure :global(img) { display: block; width: 100%; height: auto; }
+  .framed { border: 1px solid var(--line); }
+  .caption { margin-top: 10px; }
+</style>

@@ -1,0 +1,34 @@
+---
+import SectionHead from '../SectionHead.astro';
+import NoteCard from '../NoteCard.astro';
+import { postUrl, formatDate, postHeading, type Post } from '../../utils/blog';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+{posts.length > 0 && (
+  <section class="container related">
+    <SectionHead title="Ещё по теме" />
+    <div class="grid">
+      {posts.map((p) => (
+        <NoteCard
+          href={postUrl(p)}
+          category={p.data.category}
+          date={formatDate(p.data.date)}
+          title={postHeading(p)}
+          description={p.data.description}
+          cover={p.data.cover}
+          variant="compact"
+        />
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .related { padding-top: 56px; }
+  .grid { margin-top: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 30px; align-items: start; }
+</style>

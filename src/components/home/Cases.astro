@@ -1,0 +1,16 @@
+---
+import SectionHead from '../SectionHead.astro';
+import CaseCard from '../CaseCard.astro';
+import { cases } from '../../data/home';
+---
+<section id="cases" class="container cases">
+  <SectionHead title="Кейсы" />
+  <div class="grid-cards list">
+    {cases.map((c) => <CaseCard {...c} />)}
+  </div>
+</section>
+
+<style>
+  .cases { padding-top: 88px; padding-bottom: 96px; }
+  .list { margin-top: 26px; gap: 34px 30px; }
+</style>

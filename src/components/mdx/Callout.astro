@@ -1,0 +1,17 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+<div class="callout">
+  <div class="eyebrow">{label}</div>
+  <div class="body"><slot /></div>
+</div>
+
+<style>
+  .callout { margin-top: 28px; background: var(--sand); padding: 20px 22px; }
+  .body { margin-top: 9px; font-size: 17px; line-height: 1.45; color: var(--text-2); }
+  .body :global(strong) { font-weight: 600; color: var(--ink); }
+</style>

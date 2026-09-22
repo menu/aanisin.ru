@@ -1,0 +1,31 @@
+---
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  type: string;
+  title: string;
+  desc: string;
+  result: { accent: string; rest: string };
+  meta: string;
+}
+
+const { type, title, desc, result, meta } = Astro.props;
+---
+<article class="case">
+  <Placeholder />
+  <div class="eyebrow type">{type}</div>
+  <h3 class="title">{title}</h3>
+  <p class="desc">{desc}</p>
+  <p class="result"><strong>{result.accent}</strong>{result.rest}</p>
+  <div class="meta">{meta}</div>
+</article>
+
+<style>
+  .case { min-width: 0; }
+  .type { margin-top: 13px; }
+  .title { margin-top: 8px; font-size: 22px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; }
+  .desc { margin-top: 9px; font-size: 16px; line-height: 1.5; color: var(--text-2); }
+  .result { margin-top: 10px; font-size: 16px; line-height: 1.45; color: var(--text-2); }
+  .result strong { font-weight: 600; color: var(--ink); }
+  .meta { margin-top: 8px; font-size: 14px; color: var(--muted); }
+</style>

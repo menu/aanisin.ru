@@ -1,0 +1,67 @@
+---
+import { site, sections, type SectionKey } from '../data/site';
+
+interface Props {
+  current?: SectionKey;
+  // Полоска прочтения под шапкой — для статей
+  progress?: boolean;
+}
+
+const { current, progress = false } = Astro.props;
+---
+<header class="site-header">
+  <div class="container inner">
+    <div class="brand">
+      <a href="/" class="name">{site.name}</a>
+      <span class="status">Только консультации</span>
+    </div>
+    <nav class="nav" aria-label="Разделы">
+      {sections.map((s) => (
+        <a href={s.href} class:list={{ active: s.key === current }} aria-current={s.key === current ? 'page' : undefined}>{s.label}</a>
+      ))}
+      <a href={`mailto:${site.email}`} class="cta">Написать</a>
+    </nav>
+  </div>
+  {progress && (
+    <div class="progress" aria-hidden="true"><div class="bar" data-reading-progress></div></div>
+  )}
+</header>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
+  if (bar) {
+    const update = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const ratio = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = `scaleX(${ratio})`;
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .inner {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brand { display: flex; flex-direction: column; gap: 3px; }
+  .name, .name:hover { font-size: 15px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+  .status { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+  .status::before { content: ''; width: 8px; height: 8px; flex: none; background: var(--warn); }
+  .nav { display: flex; flex-wrap: wrap; gap: 22px; font-size: 15px; align-items: center; }
+  .nav a { color: var(--muted); }
+  .nav a:hover, .nav a.active { color: var(--ink); }
+  .nav .cta { color: var(--accent); font-weight: 500; }
+  .nav .cta:hover { color: var(--accent-hover); }
+  .progress { height: 3px; background: var(--sand); margin-bottom: -1px; }
+  .bar { height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+</style>

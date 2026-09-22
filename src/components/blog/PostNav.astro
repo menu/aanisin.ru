@@ -1,0 +1,30 @@
+---
+import { postUrl, postHeading, type Post } from '../../utils/blog';
+
+interface Props {
+  prev?: Post;
+  next?: Post;
+}
+
+const { prev, next } = Astro.props;
+---
+{(prev || next) && (
+  <nav class="container wrap" aria-label="Соседние заметки">
+    <div class="row">
+      {prev
+        ? <a href={postUrl(prev)} class="link"><span class="eyebrow">Предыдущая</span><span class="title">❰&#8202;{postHeading(prev)}</span></a>
+        : <span class="link" />}
+      {next && <a href={postUrl(next)} class="link next"><span class="eyebrow">Следующая</span><span class="title">{postHeading(next)}&#8202;❱</span></a>}
+    </div>
+  </nav>
+)}
+
+<style>
+  .wrap { margin-top: 72px; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px 30px; justify-content: space-between; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 16px; }
+  .link { flex: 1 1 260px; min-width: 0; color: var(--ink); }
+  .link:hover { color: var(--accent); }
+  .next { text-align: right; }
+  .eyebrow { display: block; }
+  .title { display: block; margin-top: 6px; font-weight: 600; }
+</style>

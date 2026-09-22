@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/blog/Breadcrumbs.astro';
+import PostHeader from '../../components/blog/PostHeader.astro';
+import Toc from '../../components/blog/Toc.astro';
+import Prose from '../../components/blog/Prose.astro';
+import ShareLinks from '../../components/blog/ShareLinks.astro';
+import AuthorCard from '../../components/blog/AuthorCard.astro';
+import PostNav from '../../components/blog/PostNav.astro';
+import RelatedNotes from '../../components/blog/RelatedNotes.astro';
+import CtaBox from '../../components/blog/CtaBox.astro';
+import Figure from '../../components/mdx/Figure.astro';
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import { getPosts, postHeading, type Post } from '../../utils/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  // posts отсортированы от новых к старым
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prev: posts[i + 1],
+      next: posts[i - 1],
+      related: posts.filter((p) => p.id !== post.id).slice(0, 2),
+    },
+  }));
+}
+
+interface Props {
+  post: Post;
+  prev?: Post;
+  next?: Post;
+  related: Post[];
+}
+
+const { post, prev, next, related } = Astro.props;
+const { Content, headings } = await render(post);
+const url = new URL(Astro.url.pathname, Astro.site).href;
+
+// Вертикальная обложка для телефонов: подставляется через <source>, на остальных — обычная
+const coverMobile = post.data.coverMobile
+  ? await getImage({ src: post.data.coverMobile, widths: [390, 600, 900, 1086], sizes: 'calc(100vw - 40px)', format: 'webp' })
+  : undefined;
+
+const cta = post.data.cta ?? {
+  title: 'Нужен разбор вашего сайта?',
+  text: 'Полтора часа разбора: что у вас происходит с поиском и что делать в первую очередь. Напишите пару слов про сайт и задачу.',
+};
+---
+<BaseLayout title={post.data.title} description={post.data.description} current="notes" progress>
+  <Breadcrumbs items={[
+    { label: 'Главная', href: '/' },
+    { label: 'Заметки', href: '/blog/' },
+    { label: post.data.crumb },
+  ]} />
+
+  <article class="container">
+    <PostHeader post={post} url={url} />
+
+    {post.data.cover ? (
+      <Figure caption={post.data.coverCaption}>
+        <picture>
+          {coverMobile && (
+            <source
+              media="(max-width: 599px)"
+              srcset={coverMobile.srcSet.attribute}
+              sizes="calc(100vw - 40px)"
+              width={post.data.coverMobile!.width}
+              height={post.data.coverMobile!.height}
+            />
+          )}
+          <Image src={post.data.cover} alt="" widths={[720, 1180, 1600]} sizes="(max-width: 1260px) calc(100vw - 80px), 1100px" loading="eager" />
+        </picture>
+      </Figure>
+    ) : post.data.coverCaption && <Figure caption={post.data.coverCaption} />}
+
+    <div class="layout">
+      <Toc headings={headings} tags={post.data.tags} />
+      <div class="main">
+        <Prose><Content /></Prose>
+        <div class="share">
+          <ShareLinks url={url} title={postHeading(post)} label="Пригодилось? Поделитесь:" />
+        </div>
+        <AuthorCard />
+      </div>
+    </div>
+  </article>
+
+  <PostNav prev={prev} next={next} />
+  <RelatedNotes posts={related} />
+  <CtaBox title={cta.title} text={cta.text} />
+</BaseLayout>
+
+<style>
+  .layout { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 40px clamp(32px, 5vw, 64px); align-items: flex-start; }
+  .main { flex: 1 1 520px; min-width: 0; max-width: 720px; }
+  .share { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--line); max-width: 62ch; }
+</style>

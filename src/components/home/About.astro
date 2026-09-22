@@ -1,0 +1,40 @@
+---
+import { jobs } from '../../data/home';
+---
+<section id="about" class="band about">
+  <div class="container grid">
+    <div>
+      <h2 class="h2">О себе</h2>
+      <p class="p serif">Четыре агентства и один агрегатор: от помощника оптимизатора в веб-студии до ведущего специалиста в «Ракурсе». Работаю там, где структура важнее текстов, — крупные каталоги, мультирегион, сайты услуг в b2b и b2c.</p>
+      <p class="p serif">Больше всего люблю момент, когда из мёртвого каталога на тридцать тысяч товаров вдруг начинает идти трафик.</p>
+    </div>
+    <div>
+      <div class="eyebrow">Где работал</div>
+      <ul class="jobs">
+        {jobs.map((j) => (
+          <li>
+            <span class="years">{j.years}</span>
+            <span><span class="company">{j.name}</span><span class="role"> — {j.role}</span></span>
+          </li>
+        ))}
+      </ul>
+      <blockquote class="quote">«Разобрал наш каталог на тридцать тысяч товаров и объяснил, почему половина не индексируется»</blockquote>
+      <div class="author">Клиент, интернет-магазин канцелярии</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { padding: 80px 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 44px 60px; align-items: start; }
+  .grid > div { min-width: 0; }
+  .p { margin-top: 18px; font-size: 17.5px; line-height: 1.6; color: var(--text); max-width: 46ch; }
+  .p + .p { margin-top: 16px; }
+  .jobs { margin: 14px 0 0; padding: 0; list-style: none; font-size: 16px; line-height: 1.5; }
+  .jobs li { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-2); }
+  .years { width: 92px; flex: none; color: var(--muted); font-size: 14px; padding-top: 1px; }
+  .company { font-weight: 600; }
+  .role { color: var(--text-2); }
+  .quote { margin-top: 18px; font-size: 20px; line-height: 1.4; letter-spacing: -.01em; max-width: 36ch; text-wrap: pretty; }
+  .author { margin-top: 9px; font-size: 14px; color: var(--muted); }
+</style>

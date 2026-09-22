@@ -1,0 +1,32 @@
+---
+import { postUrl, formatShortDate, postHeading, type Post } from '../../utils/blog';
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+<ul class="feed">
+  {posts.map((p) => (
+    <li>
+      <a href={postUrl(p)}>
+        <span class="date">{formatShortDate(p.data.date)}</span>
+        <span class="text">
+          <span class="title">{postHeading(p)}</span>
+          <span class="sub">{p.data.description}</span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .feed { margin: 0; padding: 0; list-style: none; }
+  a { display: flex; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--line); color: var(--ink); }
+  a:hover { color: var(--ink); background: #F9F8F5; }
+  .date { width: 86px; flex: none; font-size: 13.5px; color: var(--muted); padding-top: 2px; }
+  .text { min-width: 0; }
+  .title { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+  .sub { display: block; margin-top: 3px; font-size: 14.5px; line-height: 1.45; color: var(--text-2); }
+</style>

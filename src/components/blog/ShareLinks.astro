@@ -1,0 +1,41 @@
+---
+interface Props {
+  url: string;
+  title: string;
+  label: string;
+}
+
+const { url, title, label } = Astro.props;
+const u = encodeURIComponent(url);
+const t = encodeURIComponent(title);
+---
+<span class="share">
+  <span class="label">{label}</span>
+  <a href={`https://t.me/share/url?url=${u}&text=${t}`} target="_blank" rel="noopener noreferrer">телеграм</a>
+  <a href={`https://vk.com/share.php?url=${u}&title=${t}`} target="_blank" rel="noopener noreferrer">вконтакте</a>
+  <button type="button" class="copy" data-copy-link={url}>скопировать ссылку</button>
+</span>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((btn) => {
+    const initial = btn.textContent;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copyLink ?? location.href);
+        btn.textContent = 'ссылка скопирована';
+      } catch {
+        btn.textContent = 'не получилось скопировать';
+      }
+      setTimeout(() => (btn.textContent = initial), 2000);
+    });
+  });
+</script>
+
+<style>
+  .share { display: flex; flex-wrap: wrap; gap: 12px 14px; align-items: center; font-size: 15px; }
+  .label { color: var(--muted); }
+  a, .copy { color: #0A62B0; }
+  a:hover, .copy:hover { color: #084E8C; }
+  .copy { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; }
+  .copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+</style>

@@ -1,0 +1,23 @@
+---
+// Блок кода с подсветкой «плохих» и «хороших» строк-комментариев.
+// Пустая строка в lines — визуальный разрыв между группами.
+interface Line {
+  text: string;
+  tone?: 'bad' | 'good';
+}
+
+interface Props {
+  lines: (Line | string)[];
+}
+
+const lines = Astro.props.lines.map((l) => (typeof l === 'string' ? { text: l } : l));
+---
+<pre class="code"><code>{lines.map((l) => <span class:list={['line', l.tone, { gap: l.text === '' }]}>{l.text}</span>)}</code></pre>
+
+<style>
+  .code { margin: 20px 0 0; background: var(--sand); padding: 14px 16px; overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.7; }
+  code { display: flex; flex-direction: column; font: inherit; background: none; padding: 0; }
+  .gap { height: 12px; }
+  .bad { color: var(--accent); }
+  .good { color: #1E7A4B; }
+</style>

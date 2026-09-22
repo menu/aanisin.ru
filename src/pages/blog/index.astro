@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/blog/Breadcrumbs.astro';
+import NoteCard from '../../components/NoteCard.astro';
+import NoteFeed from '../../components/blog/NoteFeed.astro';
+import EmptyState from '../../components/blog/EmptyState.astro';
+import { getPosts, postUrl, formatDate, postHeading } from '../../utils/blog';
+
+const posts = await getPosts();
+const [latest, ...rest] = posts;
+---
+<BaseLayout
+  title="Заметки — Анисин Алексей"
+  description="Разборы с проектов: индексация, структура каталогов, мультирегион и чек-листы. Пишу редко и только про то, что разбирал сам."
+  current="notes"
+>
+  <Breadcrumbs items={[{ label: 'Главная', href: '/' }, { label: 'Заметки' }]} />
+
+  <header class="container head">
+    <h1 class="title">Заметки</h1>
+    <p class="lead serif">Разборы с проектов: индексация, структура каталогов, мультирегион и чек-листы. Пишу редко и только про то, что разбирал сам.</p>
+  </header>
+
+  <section class="container list">
+    {latest ? (
+      <div class="grid-cards layout">
+        <NoteCard
+          href={postUrl(latest)}
+          category={latest.data.category}
+          date={formatDate(latest.data.date)}
+          title={postHeading(latest)}
+          description={latest.data.description}
+          cover={latest.data.cover}
+        />
+        <div class="side">
+          <span class="eyebrow">Лента заметок</span>
+          <div class="side-body">
+            {rest.length > 0
+              ? <NoteFeed posts={rest} />
+              : <EmptyState title="Пока это всё" text="Здесь появятся следующие заметки. Свежая — слева." />}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <EmptyState title="Пока пусто" text="Заметок ещё нет." link={{ href: '/', label: 'На главную' }} />
+    )}
+  </section>
+
+</BaseLayout>
+
+<style>
+  .head { padding-top: 26px; }
+  .title { font-size: clamp(38px, 6.4vw, 72px); line-height: 1; font-weight: 700; letter-spacing: -.04em; }
+  .lead { margin-top: 20px; font-size: 20px; line-height: 1.5; color: var(--text); max-width: 52ch; }
+  .list { margin-top: 40px; padding-bottom: 96px; }
+  .layout { gap: 34px 40px; }
+  .side { min-width: 0; }
+  .side-body { margin-top: 12px; }
+</style>

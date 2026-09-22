@@ -1,0 +1,35 @@
+---
+import SectionHead from '../SectionHead.astro';
+import NoteCard from '../NoteCard.astro';
+import { getPosts, postUrl, formatDate, postHeading } from '../../utils/blog';
+
+const [latest] = await getPosts();
+---
+{latest && (
+  <section id="notes" class="container notes">
+    <SectionHead title="Заметки" />
+    <div class="grid-cards layout">
+      <NoteCard
+        href={postUrl(latest)}
+        category={latest.data.category}
+        date={formatDate(latest.data.date)}
+        title={postHeading(latest)}
+        description={latest.data.description}
+        cover={latest.data.cover}
+      />
+      <div class="side">
+        <p class="aside">Пишу редко и только про то, что сам разбирал на проектах.</p>
+        <a href="/blog/" class="all">Все заметки&#8202;❱</a>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .notes { padding-top: 88px; padding-bottom: 96px; }
+  .layout { margin-top: 26px; gap: 34px 40px; }
+  .side { min-width: 0; }
+  .aside { font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 34ch; }
+  .all { display: inline-block; margin-top: 10px; font-size: 15px; font-weight: 500; color: var(--accent); }
+  .all:hover { color: var(--accent-hover); }
+</style>

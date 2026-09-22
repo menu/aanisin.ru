@@ -1,0 +1,26 @@
+---
+import { site } from '../../data/site';
+---
+<section class="faq">
+  <div class="head">
+    <h2 class="title">Частые вопросы</h2>
+    <span class="eyebrow">Спрашивают чаще всего</span>
+  </div>
+  <div class="items"><slot /></div>
+  <div class="ask">
+    <span class="ask-text"><strong>Вопрос не из списка?</strong> Напишите — отвечу в течение дня.</span>
+    <a href={`mailto:${site.email}`} class="cta">Написать&#8202;❱</a>
+  </div>
+</section>
+
+<style>
+  .faq { margin-top: 46px; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+  .title { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+  .items { margin-top: 4px; font-size: 16px; }
+  .ask { margin-top: 18px; background: var(--sand); padding: 16px 18px; display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: space-between; align-items: center; }
+  .ask-text { font-size: 16px; line-height: 1.45; max-width: 40ch; color: var(--text-2); }
+  .ask-text strong { font-weight: 600; color: var(--ink); }
+  .cta { font-size: 15px; font-weight: 500; color: var(--accent); white-space: nowrap; }
+  .cta:hover { color: var(--accent-hover); }
+</style>

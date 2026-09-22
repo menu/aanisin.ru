@@ -1,0 +1,28 @@
+---
+// Цепочка шагов: серия адресов или модель «интерфейс → URL → ссылка».
+// В отличие от блока кода переносится на следующую строку, поэтому не даёт
+// горизонтальной прокрутки на узком экране. mono — для URL и другого кода.
+interface Props {
+  steps: string[];
+  mono?: boolean;
+}
+
+const { steps, mono = false } = Astro.props;
+---
+<div class:list={['flow', { mono }]}>
+  {steps.map((step) => <span class="step"><span class="label">{step}</span></span>)}
+</div>
+
+<style>
+  .flow { margin: 20px 0 0; max-width: none; display: flex; flex-wrap: wrap; align-items: center; row-gap: 8px; }
+  .step { display: flex; align-items: center; min-width: 0; }
+  .step + .step::before { content: '→'; flex: none; padding: 0 10px; font-size: 15px; color: var(--accent); }
+  .label { background: var(--sand); padding: 9px 13px; font-size: 15px; line-height: 1.35; color: var(--text-2); overflow-wrap: anywhere; }
+  .mono .label { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+
+  @media (max-width: 599px) {
+    /* На телефоне цепочка разворачивается в столбик: стрелка уходит к началу шага */
+    .flow { flex-direction: column; align-items: flex-start; row-gap: 6px; }
+    .step + .step::before { padding: 0 8px 0 0; }
+  }
+</style>

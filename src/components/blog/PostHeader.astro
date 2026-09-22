@@ -1,0 +1,53 @@
+---
+import ShareLinks from './ShareLinks.astro';
+import { formatDate, formatDateWithYear, pluralMinutes, postHeading, type Post } from '../../utils/blog';
+
+interface Props {
+  post: Post;
+  url: string;
+}
+
+const { post, url } = Astro.props;
+const { lead, category, date, updated, readingTime } = post.data;
+const heading = postHeading(post);
+---
+<div class="post-header">
+  <div class="meta">
+    <span class="tag">{category}</span>
+    <time datetime={date.toISOString().slice(0, 10)}>{formatDateWithYear(date)}</time>
+    <span>· {pluralMinutes(readingTime)}</span>
+    {updated && <span>· обновлено <time datetime={updated.toISOString().slice(0, 10)}>{formatDate(updated)}</time></span>}
+  </div>
+  <h1 class="title">{heading}</h1>
+  <p class="lead serif">{lead}</p>
+  <div class="byline">
+    <span class="author">
+      <img src="/photo.jpg" width="44" height="44" alt="" class="photo">
+      <span><span class="name">Алексей Анисин</span><span class="role">SEO-специалист, Москва</span></span>
+    </span>
+    <ShareLinks url={url} title={heading} label="Поделиться:" />
+  </div>
+</div>
+
+<style>
+  .post-header { padding-top: 26px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; font-size: 13.5px; color: var(--muted); }
+  .tag { background: var(--sand); padding: 4px 10px; font-weight: 600; color: var(--ink); }
+  .title { margin-top: 16px; font-size: clamp(38px, 6.4vw, 72px); line-height: 1; font-weight: 700; letter-spacing: -.04em; max-width: 20ch; text-wrap: balance; }
+  .lead { margin-top: 22px; font-size: 20px; line-height: 1.5; color: var(--text); max-width: 52ch; }
+  .byline {
+    margin-top: 26px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 30px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .photo { width: 44px; height: 44px; flex: none; object-fit: cover; display: block; }
+  .name { font-size: 15px; font-weight: 600; }
+  .role { display: block; font-size: 14px; color: var(--muted); }
+</style>

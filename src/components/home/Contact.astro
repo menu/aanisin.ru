@@ -1,0 +1,20 @@
+---
+import MailBlock from '../MailBlock.astro';
+---
+<section id="contact" class="band contact">
+  <div class="container inner">
+    <div class="text">
+      <h2 class="h2 title">Беру проекты на аудит и сопровождение</h2>
+      <p class="p">Сейчас в работу — только консультации, остальное по договорённости. Напишите на почту пару слов про сайт и задачу.</p>
+    </div>
+    <MailBlock label="Почта" />
+  </div>
+</section>
+
+<style>
+  .contact { padding: 64px 0; }
+  .inner { display: flex; flex-wrap: wrap; gap: 24px 60px; justify-content: space-between; align-items: flex-end; }
+  .text { flex: 1 1 420px; min-width: 0; }
+  .title { max-width: 18ch; text-wrap: balance; }
+  .p { margin-top: 14px; font-size: 17px; line-height: 1.5; color: var(--text-2); max-width: 44ch; text-wrap: pretty; }
+</style>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  q: string;
+  open?: boolean;
+}
+
+const { q, open = false } = Astro.props;
+---
+<details class="item" open={open}>
+  <summary class="question">{q}<span class="sign" aria-hidden="true"></span></summary>
+  <div class="answer"><slot /></div>
+</details>
+
+<style>
+  .item { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .question { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; font-size: 17px; font-weight: 600; line-height: 1.35; cursor: pointer; list-style: none; }
+  .question::-webkit-details-marker { display: none; }
+  .question:hover { color: var(--accent); }
+  .sign { flex: none; font-size: 18px; color: var(--muted); }
+  .sign::before { content: '+'; }
+  .item[open] .sign { color: var(--accent); }
+  .item[open] .sign::before { content: '−'; }
+  .answer :global(p) { margin: 10px 0 0; font-family: var(--serif); font-size: 16px; line-height: 1.6; color: var(--text); max-width: 52ch; text-wrap: pretty; }
+</style>
